@@ -1,0 +1,220 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Alex Blog - 个人博客网站</title>
+    <meta name="keywords" content="Alex个人博客"/>
+    <meta name="description" content="Alex - 一个专注于开源和创新的码农"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/web/css/base.css" rel="stylesheet">
+    <link href="/static/web/css/index.css" rel="stylesheet">
+    <link href="/static/web/css/m.css" rel="stylesheet">
+    <script src="/static/web/js/jquery.min.js"></script>
+    <script src="/static/web/js/index.js"></script>
+    <script src="/static/web/js/tags.js"></script>
+{#    <script src="/static/web/js/common.js"></script>#}
+    <script src="/static/web/js/jquery.easyfader.min.js"></script>
+    <style type="text/css">
+    .cloud {
+    pointer-events: none;
+}
+#tagsList {
+	position: relative;
+
+	width: 364px;
+
+	height: 364px;
+
+    left: -40px;
+    pointer-events: none;
+}
+
+#tagsList a {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	font-family: cursive;
+	color: #000331;
+	font-weight: bold;
+	text-decoration: none;
+	padding: 3px 6px;
+    pointer-events: auto;
+}
+#tagsList a:hover {
+	color: #ffcd46;
+	letter-spacing: 2px;
+}
+</style>
+    <script >
+        window.onload = function () {
+            var oH2 = document.getElementsByTagName("h2")[0];
+            var oUl = document.getElementsByTagName("ul")[0];
+            oH2.onclick = function () {
+                var style = oUl.style;
+                style.display = style.display == "block" ? "none" : "block";
+                oH2.className = style.display == "block" ? "open" : ""
+            }
+        }
+        function searchToggle(obj, evt){
+        var container = $(obj).closest('.search-wrapper');
+
+        if(!container.hasClass('active')){
+              container.addClass('active');
+              evt.preventDefault();
+        }
+        else if(container.hasClass('active') && $(obj).closest('.input-holder').length == 0){
+              container.removeClass('active');
+              // clear input
+              container.find('.search-input').val('');
+              // clear and hide result container when we press close
+              container.find('.result-container').fadeOut(100, function(){$(this).empty();});
+        }
+    }
+
+    function submitFn(obj, evt){
+        value = $(obj).find('.search-input').val().trim();
+
+        _html = "Yup yup! Your search text sounds like this: ";
+        if(!value.length){
+            _html = "请输入你要搜索的关键字！";
+        }
+        else {
+            location.href = '/search?keywords=' + value
+        }
+        $(obj).find('.result-container').html('<span>' + _html + '</span>');
+        $(obj).find('.result-container').fadeIn(100);
+
+        evt.preventDefault()
+    </script>
+</head>
+<body>
+<header>
+    <div>
+        <nav>
+            <ul>
+                <li><a href="#">Alex个人博客</a></li>
+                <li><a href="#">Index</a></li>
+                <li><a href="#">About Me</a></li>
+                <li><a href="#">Share</a></li>
+                <li><a href="#">Learn</a></li>
+                <li><a href="#">Live</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Gbook</a></li>
+            </ul>
+
+        </nav>
+    </div>
+</header>
+<article>
+    <div class="banner">
+        <div id="sucaihuo" class="fader"><img class="slide" src="/static/web/images/banner02.jpg"> <img class="slide"
+                                                                                                       src="/static/web/images/banner01.jpg">
+            <img class="slide" src="/static/web/images/banner03.jpg">
+            <div class="fader_controls">
+                <div class="page prev" data-target="prev">&lsaquo;</div>
+                <div class="page next" data-target="next">&rsaquo;</div>
+                <ul class="pager_list">
+                </ul>
+            </div>
+        </div>
+        <script>
+            $(function () {
+                $('#sucaihuo').easyFader();
+            });
+        </script>
+    </div>
+
+    <div class="newblogs">
+        <h2 class="hometitle">最新文章</h2>
+        <ul>
+            {% for article in articles %}
+                <li>
+                    <h3 class="blogtitle">
+                        <span>
+                            <a href="{{ url_for('web.info',id=article.id) }}" title="css3" class="classname">Alex个人博客</a>
+                        </span>
+                        <a href="{{ url_for('web.info',id=article.id) }}">{{ article.title }}</a>
+                    </h3>
+                    <div class="bloginfo">
+                        <span class="blogpic">
+                            <a href="{{ url_for('web.info',id=article.id) }}">
+                                <img src="/static/web/images/t01.jpg"/>
+                            </a>
+                        </span>
+                        <p>{{ article.desc }}</p>
+                    </div>
+                    <div class="autor">
+                        <span class="lm f_l"></span>
+                        <span class="dtime f_l">{{ article.create_time }}</span>
+                        <span class="viewnum f_l">浏览（<a href="#">1429</a>）</span>
+                        <span class="f_r"><a href="{{ url_for('web.info',id=article.id) }}" class="more">阅读原文>></a></span>
+                    </div>
+                    <div class="line"></div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="rbox">
+         <div class="cloud" id="tagsList">
+             <h2 class="hometitle" style="left: 50px;">标签云</h2>
+
+            <a href="#" title="Python">Python</a>
+
+            <a href="#" title="爬虫">爬虫</a>
+
+            <a href="#" title="flask">flask</a>
+
+            <a href="#" title="sec">sec</a>
+
+            <a href="#" title="灰帽">灰帽</a>
+
+            <a href="#" title="web安全">web安全</a>
+
+            <a href="#" title="佛系程序员">佛系程序员</a>
+
+            <a href="#" title="wooyun">wooyun</a>
+
+            <a href="#" title="搬砖">搬砖</a>
+
+            <a href="#" title="apt">apt</a>
+
+            <a href="#" title="个人博客">个人博客</a>
+
+            <a href="#" title="web渗透">web渗透</a>
+
+            <a href="#" title="内网渗透">内网渗透</a>
+
+            <a href="#" title="伪黑阔">伪黑阔</a>
+
+            <a href="#" title="黑盒测试">黑盒测试</a>
+
+            <a href="#" title="灰盒测试">灰盒测试</a>
+
+            <a href="#" title="内网apt攻击">内网apt攻击</a>
+
+    </div>
+
+        <div class="links">
+            <h2 class="hometitle">友情链接</h2>
+            <ul>
+                <li><a href="https://github.com/HBGMZ?tab=repositories">Alex Blog</a></li>
+                <li><a href="https://github.com/HBGMZ">GitHub</a></li>
+                <li><a href="https://gitee.com/HBgmz/events">Gitee</a></li>
+                <li><a href="http://106.14.166.3/index/">刘辛锋个人博客</a></li>
+                <li><a href="http://www.yangqq.com" >杨青博客</a></li>
+            </ul>
+        </div>
+        <div class="weixin">
+            <h2 class="hometitle">官方微信</h2>
+            <ul>
+                <img src="/static/web/images/wx.jpg">
+            </ul>
+        </div>
+    </div>
+</article>
+<footer>
+    <p>Design by <a href="/">Alex个人博客</a> <a href="/">浙ICP备11002373号-1</a></p>
+</footer>
+<a href="#" class="cd-top">Top</a>
+</body>
+</html>
